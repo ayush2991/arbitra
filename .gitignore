@@ -1,0 +1,27 @@
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

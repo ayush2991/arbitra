@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: 220 33% 98%;
+  --foreground: 220 40% 10%;
+  --primary: #3b82f6;
+  /* Simplified for v4 theme testing */
+  --secondary: 220 15% 90%;
+  --accent: 260 90% 64%;
+  --muted: 220 15% 96%;
+  --border: 220 15% 85%;
+}
+
+.dark {
+  --background: 220 40% 6%;
+  --foreground: 220 10% 98%;
+  --primary: #60a5fa;
+  --secondary: 220 20% 15%;
+  --accent: 260 80% 70%;
+  --muted: 220 20% 12%;
+  --border: 220 20% 18%;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
+}
