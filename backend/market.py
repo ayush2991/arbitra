@@ -28,11 +28,11 @@ class MarketSimulator:
         for internal_symbol, yf_symbol in self.symbol_map.items():
             try:
                 ticker = yf.Ticker(yf_symbol)
-                # Fetch recent 1-minute data for the last day to get some history points
+                # Fetch recent 1-minute data for the last day to get enough history points
                 hist = ticker.history(period="1d", interval="1m")
                 if not hist.empty:
-                    # Take last 20 points
-                    prices = hist['Close'].tail(20).tolist()
+                    # Take last 100 points for longer term indicators (MACD, Bollinger)
+                    prices = hist['Close'].tail(100).tolist()
                     self.history[internal_symbol] = [float(p) for p in prices]
                     self.assets[internal_symbol]["price"] = float(prices[-1])
                     print(f"Pre-populated {internal_symbol} with {len(prices)} history points.")
@@ -56,7 +56,7 @@ class MarketSimulator:
                     self.assets[internal_symbol]["price"] = float(price)
                     self.history[internal_symbol].append(float(price))
                     
-                    if len(self.history[internal_symbol]) > 100:
+                    if len(self.history[internal_symbol]) > 200:
                         self.history[internal_symbol].pop(0)
             except Exception as e:
                 print(f"Error updating price for {internal_symbol} ({yf_symbol}): {e}")
