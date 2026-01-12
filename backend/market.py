@@ -10,12 +10,34 @@ class MarketSimulator:
             "GOOGL": "GOOGL",
             "BTC": "BTC-USD",
             "ETH": "ETH-USD",
+            "NIKKEI": "^N225",
+            "HANGSENG": "^HSI",
+            "ASX": "^AXJO",
         }
         self.assets = {symbol: {"price": 0.0} for symbol in self.symbol_map}
         self.history: Dict[str, List[float]] = {symbol: [] for symbol in self.symbol_map}
         
-        # Initial fetch to populate data
+        # Initial pre-population of history
+        self.pre_populate_history()
+        
+        # Initial fetch to populate current data
         self.update_prices()
+
+    def pre_populate_history(self):
+        print("Pre-populating market history...")
+        for internal_symbol, yf_symbol in self.symbol_map.items():
+            try:
+                ticker = yf.Ticker(yf_symbol)
+                # Fetch recent 1-minute data for the last day to get some history points
+                hist = ticker.history(period="1d", interval="1m")
+                if not hist.empty:
+                    # Take last 20 points
+                    prices = hist['Close'].tail(20).tolist()
+                    self.history[internal_symbol] = [float(p) for p in prices]
+                    self.assets[internal_symbol]["price"] = float(prices[-1])
+                    print(f"Pre-populated {internal_symbol} with {len(prices)} history points.")
+            except Exception as e:
+                print(f"Error pre-populating {internal_symbol}: {e}")
 
     def update_prices(self):
         for internal_symbol, yf_symbol in self.symbol_map.items():

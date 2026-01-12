@@ -21,12 +21,17 @@ class TradingAgent:
             recent_prices = history[symbol][-10:]
             avg_price = sum(recent_prices) / len(recent_prices)
             
-            # Decision threshold: 0.5% deviation
-            if current_price < avg_price * 0.995:
+            # Decision threshold: 0.02% deviation for demonstration purposes
+            diff_pct = (current_price - avg_price) / avg_price
+            # print(f"Debug: {symbol} Price: {current_price}, Avg: {avg_price:.2f}, Diff: {diff_pct:.4%}")
+            
+            if diff_pct < -0.0002:
                 # Buy
+                print(f"Signal: BUY {symbol} at {current_price} (Avg: {avg_price}, Diff: {diff_pct:.4%})")
                 self.buy(symbol, current_price)
-            elif current_price > avg_price * 1.005:
+            elif diff_pct > 0.0002:
                 # Sell
+                print(f"Signal: SELL {symbol} at {current_price} (Avg: {avg_price}, Diff: {diff_pct:.4%})")
                 self.sell(symbol, current_price)
         
         self.update_capital_history(prices)
