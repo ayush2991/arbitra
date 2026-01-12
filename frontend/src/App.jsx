@@ -154,6 +154,7 @@ const App = () => {
                                             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Quantity</th>
                                             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Price</th>
                                             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Total</th>
+                                            <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Rationale</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -175,6 +176,7 @@ const App = () => {
                                                     <td className="px-6 py-4 font-mono text-sm">{trade.quantity.toFixed(4)}</td>
                                                     <td className="px-6 py-4 font-mono text-sm">${trade.price.toLocaleString()}</td>
                                                     <td className="px-6 py-4 font-bold">${trade.total.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                                                    <td className="px-6 py-4 text-xs text-muted-foreground leading-relaxed max-w-xs">{trade.reason}</td>
                                                 </motion.tr>
                                             ))}
                                         </AnimatePresence>

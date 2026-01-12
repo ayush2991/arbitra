@@ -27,16 +27,18 @@ class TradingAgent:
             
             if diff_pct < -0.0002:
                 # Buy
+                reason = f"Price ({current_price:.2f}) is {abs(diff_pct):.2%} below 10-period average ({avg_price:.2f}). Mean reversion strategy triggers a BUY signal."
                 print(f"Signal: BUY {symbol} at {current_price} (Avg: {avg_price}, Diff: {diff_pct:.4%})")
-                self.buy(symbol, current_price)
+                self.buy(symbol, current_price, reason)
             elif diff_pct > 0.0002:
                 # Sell
+                reason = f"Price ({current_price:.2f}) is {diff_pct:.2%} above 10-period average ({avg_price:.2f}). Mean reversion strategy triggers a SELL signal."
                 print(f"Signal: SELL {symbol} at {current_price} (Avg: {avg_price}, Diff: {diff_pct:.4%})")
-                self.sell(symbol, current_price)
+                self.sell(symbol, current_price, reason)
         
         self.update_capital_history(prices)
 
-    def buy(self, symbol: str, price: float):
+    def buy(self, symbol: str, price: float, reason: str):
         # Buy with 10% of available capital
         amount_to_spend = self.capital * 0.1
         if amount_to_spend < 100: # Minimum trade
@@ -52,10 +54,11 @@ class TradingAgent:
             "type": "BUY",
             "quantity": quantity,
             "price": price,
-            "total": amount_to_spend
+            "total": amount_to_spend,
+            "reason": reason
         })
 
-    def sell(self, symbol: str, price: float):
+    def sell(self, symbol: str, price: float, reason: str):
         quantity = self.portfolio[symbol]
         if quantity <= 0:
             return
@@ -72,7 +75,8 @@ class TradingAgent:
             "type": "SELL",
             "quantity": amount_to_sell,
             "price": price,
-            "total": revenue
+            "total": revenue,
+            "reason": reason
         })
 
     def update_capital_history(self, prices: Dict[str, float]):
