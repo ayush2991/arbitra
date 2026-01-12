@@ -5,14 +5,14 @@ Arbitra is an agentic AI-powered trading simulation platform. It demonstrates ho
 ## Features
 
 - **Autonomous Agent**: A Python-based trading agent that implements simple trend-following logic.
-- **Live Market Simulator**: A backend service that simulates price movements for major assets (AAPL, GOOGL, BTC, ETH).
-- **Modern Trading Dashboard**: A sleek, dark-themed UI built with React and Tailwind CSS.
+- **Real Market Data**: Live security price updates from Yahoo Finance (AAPL, GOOGL, BTC, ETH).
+- **Modern Trading Dashboard**: A sleek, dark-themed UI built with React and Vanilla CSS.
 - **Real-time Analytics**: Visualized capital evolution and trade history.
 
 ## Tech Stack
 
-- **Frontend**: React (Vite), Tailwind CSS, Framer Motion, Recharts, Lucide Icons.
-- **Backend**: Python (FastAPI), Pandas, Numpy, Uvicorn.
+- **Frontend**: React (Vite), Vanilla CSS, Framer Motion, Recharts, Lucide Icons.
+- **Backend**: Python (FastAPI), yfinance, Pandas, Numpy, Uvicorn.
 
 ## Getting Started
 

@@ -1,24 +1,43 @@
-import random
+import yfinance as yf
 import time
 from typing import Dict, List
 
 class MarketSimulator:
     def __init__(self):
-        self.assets = {
-            "AAPL": {"price": 180.0, "volatility": 0.002, "drift": 0.0001},
-            "GOOGL": {"price": 140.0, "volatility": 0.003, "drift": 0.0001},
-            "BTC": {"price": 45000.0, "volatility": 0.01, "drift": 0.0002},
-            "ETH": {"price": 2500.0, "volatility": 0.015, "drift": 0.0002},
+        # Map internal symbols to yfinance symbols
+        self.symbol_map = {
+            "AAPL": "AAPL",
+            "GOOGL": "GOOGL",
+            "BTC": "BTC-USD",
+            "ETH": "ETH-USD",
         }
-        self.history: Dict[str, List[float]] = {symbol: [data["price"]] for symbol, data in self.assets.items()}
+        self.assets = {symbol: {"price": 0.0} for symbol in self.symbol_map}
+        self.history: Dict[str, List[float]] = {symbol: [] for symbol in self.symbol_map}
+        
+        # Initial fetch to populate data
+        self.update_prices()
 
     def update_prices(self):
-        for symbol, data in self.assets.items():
-            change_percent = random.normalvariate(data["drift"], data["volatility"])
-            data["price"] *= (1 + change_percent)
-            self.history[symbol].append(data["price"])
-            if len(self.history[symbol]) > 100:
-                self.history[symbol].pop(0)
+        for internal_symbol, yf_symbol in self.symbol_map.items():
+            try:
+                ticker = yf.Ticker(yf_symbol)
+                # Using fast_info['lastPrice'] for speed
+                price = ticker.fast_info['lastPrice']
+                
+                # If fast_info fails or returns 0, try history as fallback
+                if price is None or price <= 0:
+                    hist = ticker.history(period="1d")
+                    if not hist.empty:
+                        price = hist['Close'].iloc[-1]
+                
+                if price:
+                    self.assets[internal_symbol]["price"] = float(price)
+                    self.history[internal_symbol].append(float(price))
+                    
+                    if len(self.history[internal_symbol]) > 100:
+                        self.history[internal_symbol].pop(0)
+            except Exception as e:
+                print(f"Error updating price for {internal_symbol} ({yf_symbol}): {e}")
 
     def get_prices(self) -> Dict[str, float]:
         return {symbol: data["price"] for symbol, data in self.assets.items()}

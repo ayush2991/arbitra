@@ -21,7 +21,7 @@ async def simulation_loop():
     while True:
         market.market_sim.update_prices()
         agent.trading_agent.make_decisions()
-        await asyncio.sleep(2) # Update every 2 seconds
+        await asyncio.sleep(10) # Update every 10 seconds to avoid rate limits
 
 @app.get("/status")
 async def get_status():
