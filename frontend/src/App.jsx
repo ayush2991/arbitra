@@ -193,7 +193,7 @@ const App = () => {
                                 <BarChart3 className="w-5 h-5 text-primary" />
                                 Market Watch
                             </h2>
-                            <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                                 {Object.entries(market_prices).map(([symbol, price]) => (
                                     <div key={symbol} className="bg-secondary/30 border border-border rounded-2xl p-5 flex items-center justify-between hover:border-primary/50 transition-all cursor-default">
                                         <div className="flex items-center gap-3">
@@ -225,13 +225,18 @@ const App = () => {
                                 </div>
                                 <div className="pt-6 border-t border-primary/10">
                                     <div className="text-xs text-muted-foreground uppercase font-bold tracking-widest mb-3">Holdings</div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {Object.entries(portfolio).map(([symbol, quantity]) => (
+                                    <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {Object.entries(portfolio).filter(([_, q]) => q > 0).map(([symbol, quantity]) => (
                                             <div key={symbol} className="bg-background/50 border border-border p-3 rounded-xl">
                                                 <div className="text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-tighter">{symbol}</div>
                                                 <div className="font-bold truncate">{quantity.toFixed(4)}</div>
                                             </div>
                                         ))}
+                                        {Object.values(portfolio).every(q => q === 0) && (
+                                            <div className="col-span-2 text-center py-8 text-muted-foreground text-sm italic">
+                                                No holdings yet. Agent is scanning for opportunities...
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
